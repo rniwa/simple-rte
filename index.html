@@ -28,7 +28,7 @@ function codeView() {
 }
 
 function codeEditor() {
-	return document.getElementById('html-editor');
+    return document.getElementById('html-editor');
 }
 
 function executeCommand(command, value) {
@@ -97,10 +97,10 @@ function updateToolbars() {
         var colorRegEg = /^rgba?\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})(,\s*(\d{1,3}))?\)$/;
         var color = colorRegEg.exec(value);
         if (!color) {
-			if (typeof value == "number") // IE9
-				return '#' + value.toString(16);
-			return value;
-		}
+            if (typeof value == "number") // IE9
+                return '#' + value.toString(16);
+            return value;
+        }
 
         if (!color[5] || !toTwoDigitHex(color[5]))
             return '#' + toTwoDigitHex(color[1]) + toTwoDigitHex(color[2]) + toTwoDigitHex(color[3]);
@@ -170,126 +170,126 @@ function updateToolbars() {
         }
     }
 
-	location.hash = 'code=' + escape(editorDocument().documentElement.outerHTML) + '&designMode=' + editorInDesignMode().toString();
+    location.hash = 'code=' + escape(editorDocument().documentElement.outerHTML) + '&designMode=' + editorInDesignMode().toString();
 }
 
 function toggleDesignMode(inDesignMode) {
-	editorDocument().designMode = inDesignMode ? 'on' : 'off';
-	updateEditor(codeEditor().style.display != 'none' ? codeEditor().value : codeView().value);
-	observeEditor();
+    editorDocument().designMode = inDesignMode ? 'on' : 'off';
+    updateEditor(codeEditor().style.display != 'none' ? codeEditor().value : codeView().value);
+    observeEditor();
 }
 
 function parseHash() {
-	var tokens = location.hash.substr(1).split('&');
-	var params = { };
-	for (var i = 0; i < tokens.length; i++) {
-		keyValue = tokens[i].split('=');
-		params[keyValue[0]] = unescape(keyValue[1]);
-	}
-	return params;
+    var tokens = location.hash.substr(1).split('&');
+    var params = { };
+    for (var i = 0; i < tokens.length; i++) {
+        keyValue = tokens[i].split('=');
+        params[keyValue[0]] = unescape(keyValue[1]);
+    }
+    return params;
 }
 
 function updateEditor(markup) {
-	editorDocument().close();
-	editorDocument().open();
-	editorDocument().write(markup);
-	observeEditor();
+    editorDocument().close();
+    editorDocument().open();
+    editorDocument().write(markup);
+    observeEditor();
 }
 
 function asyncCaller(callback) {
-	var timer = null;
-	return function () {
-		if (timer)
-			return;
-		timer = setTimeout(function () {
-			timer = null;
-			callback();
-		}, 0);
-	}
+    var timer = null;
+    return function () {
+        if (timer)
+            return;
+        timer = setTimeout(function () {
+            timer = null;
+            callback();
+        }, 0);
+    }
 }
 
 function observeEditor() {
-	editorDocument().observer = asyncCaller(function () {
-		updateToolbars();
-		codeView().hideEditor();
-		codeView().value = editorDocument().documentElement.outerHTML;
-	});
-	editorDocument().addEventListener('input', editorDocument().observer, false);
-	editorDocument().addEventListener('keydown', editorDocument().observer, false);
-	editorDocument().addEventListener('keyup', editorDocument().observer, false);
-	editorDocument().addEventListener('mousedown', editorDocument().observer, false);
-	editorDocument().addEventListener('mouseup', editorDocument().observer, false);
+    editorDocument().observer = asyncCaller(function () {
+        updateToolbars();
+        codeView().hideEditor();
+        codeView().value = editorDocument().documentElement.outerHTML;
+    });
+    editorDocument().addEventListener('input', editorDocument().observer, false);
+    editorDocument().addEventListener('keydown', editorDocument().observer, false);
+    editorDocument().addEventListener('keyup', editorDocument().observer, false);
+    editorDocument().addEventListener('mousedown', editorDocument().observer, false);
+    editorDocument().addEventListener('mouseup', editorDocument().observer, false);
 }
 
 function observeCodeViewAndCodeEditor() {
-	codeView().observer = asyncCaller(function () {
-		updateToolbars();
-		updateEditor(codeEditor().value);
-	});
-	codeView().showEditor = function (sync) {
-		codeEditor().removeAttribute('style');
-		codeView().style.display = 'none';
-	};
-	codeView().hideEditor = function (sync) {
-		codeView().removeAttribute('style');
-		codeEditor().style.display = 'none';
-	}
-	codeView().addEventListener('focus', function () {
-		setTimeout(function () {
-			var selectionStart = codeView().selectionStart;
-			var selectionEnd = codeView().selectionEnd;
-			codeView().showEditor(true);
-			codeEditor().value = codeView().value;
-			codeEditor().focus();
-			codeEditor().selectionStart = selectionStart;
-			codeEditor().selectionEnd = selectionEnd;
-		}, 0);
-	}, false);
-	codeEditor().addEventListener('input', codeView().observer, false);
-	codeEditor().addEventListener('keydown', codeView().observer, false);
-	codeEditor().addEventListener('keyup', codeView().observer, false);
-	codeEditor().addEventListener('blur', function () {
-		codeView().hideEditor();
-		codeView().value = codeEditor().value;
-	}, false);
+    codeView().observer = asyncCaller(function () {
+        updateToolbars();
+        updateEditor(codeEditor().value);
+    });
+    codeView().showEditor = function (sync) {
+        codeEditor().removeAttribute('style');
+        codeView().style.display = 'none';
+    };
+    codeView().hideEditor = function (sync) {
+        codeView().removeAttribute('style');
+        codeEditor().style.display = 'none';
+    }
+    codeView().addEventListener('focus', function () {
+        setTimeout(function () {
+            var selectionStart = codeView().selectionStart;
+            var selectionEnd = codeView().selectionEnd;
+            codeView().showEditor(true);
+            codeEditor().value = codeView().value;
+            codeEditor().focus();
+            codeEditor().selectionStart = selectionStart;
+            codeEditor().selectionEnd = selectionEnd;
+        }, 0);
+    }, false);
+    codeEditor().addEventListener('input', codeView().observer, false);
+    codeEditor().addEventListener('keydown', codeView().observer, false);
+    codeEditor().addEventListener('keyup', codeView().observer, false);
+    codeEditor().addEventListener('blur', function () {
+        codeView().hideEditor();
+        codeView().value = codeEditor().value;
+    }, false);
 }
 
 function init() {
-	var iframe = document.createElement('iframe');
-	document.getElementById('editor-area').appendChild(iframe);
-	iframe.id = 'editor-container';
+    var iframe = document.createElement('iframe');
+    document.getElementById('editor-area').appendChild(iframe);
+    iframe.id = 'editor-container';
 
     if (document.body.addEventListener && typeof(window.getSelection) == 'function') {
-		// Wait until IE9 sets up the document
-		setTimeout(function () {
-			observeCodeViewAndCodeEditor();
-			var hashParam = parseHash();
-			editorDocument().designMode = hashParam['designMode'] == 'true' ? 'on' : 'off';
-			updateEditor(hashParam['code'] || "<html><body><div contenteditable>hello, world</div></body></html>");
-			observeEditor();
+        // Wait until IE9 sets up the document
+        setTimeout(function () {
+            observeCodeViewAndCodeEditor();
+            var hashParam = parseHash();
+            editorDocument().designMode = hashParam['designMode'] == 'true' ? 'on' : 'off';
+            updateEditor(hashParam['code'] || "<html><body><div contenteditable>hello, world</div></body></html>");
+            observeEditor();
 
-			var toolbarItems = document.getElementById('toolbar').getElementsByTagName('li');
-			for (var i = toolbarItems.length; i > 0; i--) {
-				var anchor = toolbarItems[i - 1].getElementsByTagName('a')[0];
-				anchor.addEventListener('mousedown', (function () {
-					var commandName = toolbarItems[i - 1].className;
-					return function (event) {
-						var value = null;
-						if (commandName == 'createLink')
-							value = prompt("Please enter URL", "");
-						else if (commandName == 'styleWithCSS')
-							value = !queryValue(commandName);
-						executeCommand(commandName, value);
-						event.preventDefault();
-					};
-				})(), false);
-				anchor.addEventListener('focus', function (event) { event.preventDefault(); }, false);
-				anchor.addEventListener('click', function (event) { event.preventDefault(); }, false);
-			}
+            var toolbarItems = document.getElementById('toolbar').getElementsByTagName('li');
+            for (var i = toolbarItems.length; i > 0; i--) {
+                var anchor = toolbarItems[i - 1].getElementsByTagName('a')[0];
+                anchor.addEventListener('mousedown', (function () {
+                    var commandName = toolbarItems[i - 1].className;
+                    return function (event) {
+                        var value = null;
+                        if (commandName == 'createLink')
+                            value = prompt("Please enter URL", "");
+                        else if (commandName == 'styleWithCSS')
+                            value = !queryValue(commandName);
+                        executeCommand(commandName, value);
+                        event.preventDefault();
+                    };
+                })(), false);
+                anchor.addEventListener('focus', function (event) { event.preventDefault(); }, false);
+                anchor.addEventListener('click', function (event) { event.preventDefault(); }, false);
+            }
 
-			editorDocument().observer();
-		}, 100);
-	}
+            editorDocument().observer();
+        }, 100);
+    }
 }
 
 </script>
@@ -297,7 +297,7 @@ function init() {
 
 .toolbar {
     min-width: 65em;
-	min-width: 45em;
+    min-width: 45em;
     border: solid 2px transparent;
     height: 2em;
     margin: 0px;
@@ -326,7 +326,7 @@ function init() {
     text-decoration: inherit;
     color: inherit;
     border: solid 1px transparent;
-	border-radius: 3px;
+    border-radius: 3px;
     padding: 2px;
 }
 
@@ -346,56 +346,56 @@ function init() {
 }
 
 html {
-	height: 100%;
+    height: 100%;
 }
 
 body {
-	font-family: sans-serif;
-	margin: 0;
-	padding: 0;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-	color: white;
-	border-bottom: 1px solid #a5a5a5;
-	padding: 0;
-	margin: 0;
+    color: white;
+    border-bottom: 1px solid #a5a5a5;
+    padding: 0;
+    margin: 0;
 }
 
 header div {
-	background: #443fcb; /* Old browsers */
-	background: -moz-linear-gradient(top,  #443fcb 0%, #2c2a65 100%); /* FF3.6+ */
-	background: -webkit-linear-gradient(top,  #443fcb 0%,#2c2a65 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #443fcb 0%,#2c2a65 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #443fcb 0%,#2c2a65 100%); /* IE10+ */
-	background: linear-gradient(top,  #443fcb 0%,#2989d8 9%,#207cca 91%,#2c2a65 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#443fcb', endColorstr='#2c2a65',GradientType=0 ); /* IE6-9 */
-	padding: 10px;
-	positon: relative;
+    background: #443fcb; /* Old browsers */
+    background: -moz-linear-gradient(top,  #443fcb 0%, #2c2a65 100%); /* FF3.6+ */
+    background: -webkit-linear-gradient(top,  #443fcb 0%,#2c2a65 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #443fcb 0%,#2c2a65 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #443fcb 0%,#2c2a65 100%); /* IE10+ */
+    background: linear-gradient(top,  #443fcb 0%,#2989d8 9%,#207cca 91%,#2c2a65 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#443fcb', endColorstr='#2c2a65',GradientType=0 ); /* IE6-9 */
+    padding: 10px;
+    positon: relative;
 }
 
 header h1 {
-	padding: 0;
-	margin: 0;
-	font-size: 1em;
-	line-height: 1em;
-	font-weight: normal;
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+    line-height: 1em;
+    font-weight: normal;
 }
 
 header p {
-	position: absolute;
-	vertical-align: middle;
-	top: 10px;
-	left: 20ex;
-	padding: 0;
-	margin: 0;
-	line-height: 1.25em;
-	font-size: 0.8em;
-	opacity: 0.8;
+    position: absolute;
+    vertical-align: middle;
+    top: 10px;
+    left: 20ex;
+    padding: 0;
+    margin: 0;
+    line-height: 1.25em;
+    font-size: 0.8em;
+    opacity: 0.8;
 }
 
 header a {
-	color: inherit;
+    color: inherit;
 }
 
 #main {
@@ -405,48 +405,48 @@ header a {
 }
 
 #editor-area iframe {
-	display: block;
-	width: 100%;
-	min-height: 20em;
-	background: white;
-	margin: 0;
-	border: 0;
+    display: block;
+    width: 100%;
+    min-height: 20em;
+    background: white;
+    margin: 0;
+    border: 0;
 }
 
 nav, #pane-area h2 {
-	background: #f0f0f0; /* Old browsers */
-	background: -moz-linear-gradient(top,  #f0f0f0 0%, #e4e4e4 15%, #e7e7e7 85%, #e0e0e0 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f0f0f0), color-stop(15%,#e4e4e4), color-stop(85%,#e7e7e7), color-stop(100%,#e0e0e0)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* IE10+ */
-	background: linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#e0e0e0',GradientType=0 ); /* IE6-9 */
+    background: #f0f0f0; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f0f0f0 0%, #e4e4e4 15%, #e7e7e7 85%, #e0e0e0 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f0f0f0), color-stop(15%,#e4e4e4), color-stop(85%,#e7e7e7), color-stop(100%,#e0e0e0)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* IE10+ */
+    background: linear-gradient(top,  #f0f0f0 0%,#e4e4e4 15%,#e7e7e7 85%,#e0e0e0 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f0f0', endColorstr='#e0e0e0',GradientType=0 ); /* IE6-9 */
 
-	border-bottom: 1px solid #a5a5a5;
+    border-bottom: 1px solid #a5a5a5;
 }
 
 #pane-area {
-	vertical-align: top;
-	border-left: 1px solid #a5a5a5;
+    vertical-align: top;
+    border-left: 1px solid #a5a5a5;
 }
 
 #pane-area h2 {
-	margin: 0;
-	padding: .2em;
-	font-size: 0.9em;
-	font-weight: bold;
-	color: #666;
-	text-shadow: 0.1em 0.1em #eee;
+    margin: 0;
+    padding: .2em;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #666;
+    text-shadow: 0.1em 0.1em #eee;
 }
 
 #pane-area .code-view {
-	display: block;
-	width: 98%;
-	min-height: 20em;
-	border: none;
-	padding: 1%;
-	scroll: auto;
+    display: block;
+    width: 98%;
+    min-height: 20em;
+    border: none;
+    padding: 1%;
+    scroll: auto;
 }
 
 </style>
@@ -752,9 +752,9 @@ nav, #pane-area h2 {
 <div id="main">
     <div id="editor-area"></div>
     <div id="pane-area">
-    	<h2>Code</h2>
-    	<textarea id="html-view" class="code-view" readonly></textarea>
-    	<textarea id="html-editor" class="code-view" style="display: none"></textarea>
+        <h2>Code</h2>
+        <textarea id="html-view" class="code-view" readonly></textarea>
+        <textarea id="html-editor" class="code-view" style="display: none"></textarea>
     </div>
 </div>
 
